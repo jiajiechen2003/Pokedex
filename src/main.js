@@ -1,6 +1,6 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
-import App from './components/App.vue'
+import Pokedex from './components/Pokedex.vue'
 
-createApp(App).mount('#app')
+createApp(Pokedex).mount('#pokedex')
