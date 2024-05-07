@@ -6,12 +6,11 @@
                     <img :src="pokemon.sprites.other['official-artwork'].front_default">
                     <div class="pokemon-info">
                         <div class="pokemon-data">
-                            <div class="id">
-                                <p>{{ formattedId(pokemon.id) }}</p>
-                            </div>
-                            <div class="favorite">
-                                <input class="fav" type="radio" checked>
-                            </div>
+                            <p>{{ formattedId(pokemon.id) }}</p>
+                            <label :class="{ 'favorite': pokemon.favorite, 'add-favorite': !pokemon.favorite }"
+                                @click="markPokemonAsFavorite(pokemon)">
+                                <input type="radio" :checked="pokemon.favorite">
+                            </label>
                         </div>
                         <h5 class="pokemon-name">{{ pokemon.name }}</h5>
                         <Types class="types" :types="pokemon.types" />
@@ -30,7 +29,8 @@ export default {
     },
     data() {
         return {
-            pokemons: []
+            pokemons: [],
+            favorites: []
         };
     },
     methods: {
@@ -43,6 +43,9 @@ export default {
                             .then(response => response.json())
                             .then(pokeData => {
                                 this.pokemons.push(pokeData);
+                                if (this.favorites.includes(pokeData.id)) {
+                                    pokeData.favorite = true;
+                                }
                             })
                     })
                 })
@@ -53,9 +56,25 @@ export default {
         formattedId(id) {
             return "Nº" + id.toString().padStart(4, "0");
         },
+        markPokemonAsFavorite(pokemon) {
+            pokemon.favorite = !pokemon.favorite;
+            if (pokemon.favorite) {
+                this.favorites.push(pokemon.id);
+            } else {
+                const index = this.favorites.indexOf(pokemon.id);
+                if (index !== -1) {
+                    this.favorites.splice(index, 1);
+                }
+            }
+            localStorage.setItem('favorites', JSON.stringify(this.favorites));
+        },
+        loadFavoritesFromStorage() {
+            this.favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        }
     },
     created() {
-        this.selectPokemons()
+        this.loadFavoritesFromStorage();
+        this.selectPokemons();
     }
 }
 </script>
@@ -136,5 +155,30 @@ export default {
     display: flex;
     flex-direction: row;
     gap: 5px;
+}
+
+.favorite {
+    width: 30px;
+    height: 30px;
+    background-image: url('../img/heart-fill.svg');
+    background-size: cover;
+    cursor: pointer;
+    border: none;
+}
+
+.add-favorite {
+    width: 30px;
+    height: 30px;
+    background-image: url('../img/heart.svg');
+    background-size: cover;
+    cursor: pointer;
+    border: none;
+}
+
+.add-favorite input, .favorite input {
+    width: 30px;
+    height: 30px;
+    opacity: 0;
+    cursor: pointer;
 }
 </style>
