@@ -28,7 +28,7 @@ export default {
                 case 'electric':
                     return { backgroundColor: '#EED535' };
                 case 'ground':
-                    return { background: 'linear-gradient(180deg, #f7de3f np%, #ab9842 50%)' };
+                    return { background: 'linear-gradient(180deg, #f7de3f 50%, #ab9842 50%)' };
                 case 'fairy':
                     return { backgroundColor: '#fd89e9' };
                 case 'ice':

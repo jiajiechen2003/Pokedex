@@ -1,20 +1,19 @@
+<template>
+    <Header></Header>
+    <Pokemons></Pokemons>
+</template>
+
 <script>
 import Pokemons from './components/Pokemons.vue';
+import Header from './components/Header.vue';
 
 export default {
     components: {
-        Pokemons
+        Pokemons,
+        Header
     },
 }
 </script>
-
-<template>
-    <div id="pokemons">
-        <Pokemons></Pokemons>
-    </div>
-</template>
-
-
 
 <style scoped>
 * {

@@ -84,16 +84,16 @@ export default {
                 const index = this.team.indexOf(pokemon.id);
                 if (index !== -1) {
                     this.team.splice(index, 1);
-                    pokemon.team = false; // Actualiza el estado del equipo del Pokémon
+                    pokemon.team = false;
                     localStorage.setItem('team', JSON.stringify(this.team));
                 }
             } else {
                 if (this.team.length < 6) {
-                    pokemon.team = true; // Actualiza el estado del equipo del Pokémon
+                    pokemon.team = true;
                     this.team.push(pokemon.id);
                     localStorage.setItem('team', JSON.stringify(this.team));
                 } else {
-                    alert("¡El equipo ya tiene 6 Pokémon!");
+                    alert("Your Team Already Has 6 Pokemon");
                 }
             }
         },
