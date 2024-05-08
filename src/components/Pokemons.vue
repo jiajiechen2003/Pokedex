@@ -1,23 +1,63 @@
 <template>
     <div class="container-fluid">
-        <div class="card-col" v-for="pokemon in pokemons" :key="pokemon.name">
-            <div class="card pokemon-card">
-                <div class="card-body">
-                    <img :src="pokemon.sprites.other['official-artwork'].front_default">
-                    <div class="pokemon-info">
-                        <div class="pokemon-data">
-                            <p>{{ formattedId(pokemon.id) }}</p>
-                            <label :class="{ 'favorite': pokemon.favorite, 'add-favorite': !pokemon.favorite }"
-                                @click="markPokemonAsFavorite(pokemon)">
-                                <input type="radio" :checked="pokemon.favorite">
-                            </label>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2 filters">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Types
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item">Grass</a></li>
+                            <li><a class="dropdown-item">Poison</a></li>
+                            <li><a class="dropdown-item">Fire</a></li>
+                            <li><a class="dropdown-item">Water</a></li>
+                            <li><a class="dropdown-item">Bug</a></li>
+                            <li><a class="dropdown-item">Flying</a></li>
+                            <li><a class="dropdown-item">Normal</a></li>
+                            <li><a class="dropdown-item">Electric</a></li>
+                            <li><a class="dropdown-item">Ground</a></li>
+                            <li><a class="dropdown-item">Fairy</a></li>
+                            <li><a class="dropdown-item">Fighting</a></li>
+                            <li><a class="dropdown-item">Psychic</a></li>
+                            <li><a class="dropdown-item">Rock</a></li>
+                            <li><a class="dropdown-item">Steel</a></li>
+                            <li><a class="dropdown-item">Ice</a></li>
+                            <li><a class="dropdown-item">Ghost</a></li>
+                            <li><a class="dropdown-item">Dragon</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-10 pokemon-display">
+                    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                        <div class="container-fluid header">
+                            <img src="../img/pokedex-logo.png">
                         </div>
-                        <div class="name">
-                            <h5 class="pokemon-name">{{ pokemon.name }}</h5>
-                            <button @click="addPokemonToTeam(pokemon)">{{ pokemon.team ? 'Remove Team' : 'Add Team'
-                                }}</button>
+                    </nav>
+                    <div class="card-col" v-for="pokemon in pokemons" :key="pokemon.name">
+                        <div class="card pokemon-card">
+                            <div class="card-body">
+                                <img :src="pokemon.sprites.other['official-artwork'].front_default">
+                                <div class="pokemon-info">
+                                    <div class="pokemon-data">
+                                        <p>{{ formattedId(pokemon.id) }}</p>
+                                        <label
+                                            :class="{ 'favorite': pokemon.favorite, 'add-favorite': !pokemon.favorite }"
+                                            @click="markPokemonAsFavorite(pokemon)">
+                                            <input type="radio" :checked="pokemon.favorite">
+                                        </label>
+                                    </div>
+                                    <div class="name">
+                                        <h5 class="pokemon-name">{{ pokemon.name }}</h5>
+                                        <button @click="addPokemonToTeam(pokemon)">{{ pokemon.team ? 'Remove Team' :
+                                            'Add Team'
+                                            }}</button>
+                                    </div>
+                                    <Types class="types" :types="pokemon.types" />
+                                </div>
+                            </div>
                         </div>
-                        <Types class="types" :types="pokemon.types" />
                     </div>
                 </div>
             </div>
@@ -115,7 +155,14 @@ export default {
     text-transform: capitalize;
 }
 
-.container-fluid {
+.container-fluid.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFFFFF;
+}
+
+.pokemon-display {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -124,6 +171,23 @@ export default {
     row-gap: 50px;
     height: auto;
     background-color: #FFFFFF;
+}
+
+.filters {
+    height: 90vh;
+    background-color: #FFFFFF;
+    position: sticky;
+    top: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid gray;
+    left: 0;
+}
+
+.navbar {
+    width: 100%;
+    z-index: 100;
 }
 
 .pokemon-info p {

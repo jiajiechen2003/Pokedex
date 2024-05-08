@@ -27,9 +27,7 @@
                     <li><a class="dropdown-item">Dragon</a></li>
                 </ul>
             </div>
-            
         </div>
-
     </nav>
 </template>
 <script>
