@@ -12,7 +12,11 @@
                                 <input type="radio" :checked="pokemon.favorite">
                             </label>
                         </div>
-                        <h5 class="pokemon-name">{{ pokemon.name }}</h5>
+                        <div class="name">
+                            <h5 class="pokemon-name">{{ pokemon.name }}</h5>
+                            <button @click="addPokemonToTeam(pokemon)">{{ pokemon.team ? 'Remove Team' : 'Add Team'
+                                }}</button>
+                        </div>
                         <Types class="types" :types="pokemon.types" />
                     </div>
                 </div>
@@ -30,7 +34,8 @@ export default {
     data() {
         return {
             pokemons: [],
-            favorites: []
+            favorites: [],
+            team: []
         };
     },
     methods: {
@@ -45,6 +50,9 @@ export default {
                                 this.pokemons.push(pokeData);
                                 if (this.favorites.includes(pokeData.id)) {
                                     pokeData.favorite = true;
+                                }
+                                if (this.team.includes(pokeData.id)) {
+                                    pokeData.team = true;
                                 }
                             })
                     })
@@ -68,13 +76,35 @@ export default {
             }
             localStorage.setItem('favorites', JSON.stringify(this.favorites));
         },
-        loadFavoritesFromStorage() {
+        loadFavorites() {
             this.favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        },
+        addPokemonToTeam(pokemon) {
+            if (pokemon.team) {
+                const index = this.team.indexOf(pokemon.id);
+                if (index !== -1) {
+                    this.team.splice(index, 1);
+                    pokemon.team = false; // Actualiza el estado del equipo del Pokémon
+                    localStorage.setItem('team', JSON.stringify(this.team));
+                }
+            } else {
+                if (this.team.length < 6) {
+                    pokemon.team = true; // Actualiza el estado del equipo del Pokémon
+                    this.team.push(pokemon.id);
+                    localStorage.setItem('team', JSON.stringify(this.team));
+                } else {
+                    alert("¡El equipo ya tiene 6 Pokémon!");
+                }
+            }
+        },
+        loadTeam() {
+            this.team = JSON.parse(localStorage.getItem('team')) || [];
         }
     },
     created() {
-        this.loadFavoritesFromStorage();
         this.selectPokemons();
+        this.loadFavorites();
+        this.loadTeam();
     }
 }
 </script>
@@ -175,10 +205,27 @@ export default {
     border: none;
 }
 
-.add-favorite input, .favorite input {
+.add-favorite input,
+.favorite input {
     width: 30px;
     height: 30px;
     opacity: 0;
     cursor: pointer;
+}
+
+.name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.name button {
+    height: 18px;
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
 }
 </style>
