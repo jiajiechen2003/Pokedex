@@ -6,7 +6,7 @@
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            Types
+                            Filter by Type
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item">Grass</a></li>
@@ -27,6 +27,20 @@
                             <li><a class="dropdown-item">Ghost</a></li>
                             <li><a class="dropdown-item">Dragon</a></li>
                         </ul>
+                    </div>
+                    <div class="filters-checks">
+                        <div class="team-check">
+                            <input type="checkbox" id="onTeam">
+                            <label for="onTeam">Team</label>
+                        </div>
+                        <div class="favorites-check">
+                            <input type="checkbox" id="onFavorites">
+                            <label for="onFavorites">Favorites</label>
+                        </div>
+
+                        <div class="id-range">
+                            <input type="range" class="form-range" id="customRange1">
+                        </div>
                     </div>
                 </div>
                 <div class="col-10 pokemon-display">
@@ -181,8 +195,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     border-right: 1px solid gray;
     left: 0;
+    gap: 25px;
 }
 
 .navbar {
@@ -291,5 +307,28 @@ export default {
     justify-content: center;
     align-items: center;
     font-size: 11px;
+}
+
+.dropdown-toggle {
+    width: 155px;
+    height: 50px;
+    border-radius: 0px;
+    background-color: #313131;
+}
+
+.dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.filters-checks {
+    gap: 20px;
+}
+
+.filters-checks input {
+    margin-right: 5px;
 }
 </style>
