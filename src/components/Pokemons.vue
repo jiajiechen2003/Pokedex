@@ -30,11 +30,11 @@
                     </div>
                     <div class="filters-checks">
                         <div class="team-check">
-                            <input type="checkbox" id="onTeam">
+                            <input type="checkbox" id="onTeam" v-model="showTeam">
                             <label for="onTeam">Team</label>
                         </div>
                         <div class="favorites-check">
-                            <input type="checkbox" id="onFavorites">
+                            <input type="checkbox" id="onFavorites" v-model="showFavorites">
                             <label for="onFavorites">Favorites</label>
                         </div>
 
@@ -49,7 +49,7 @@
                             <img src="../img/pokedex-logo.png">
                         </div>
                     </nav>
-                    <div class="card-col" v-for="pokemon in pokemons" :key="pokemon.name">
+                    <div class="card-col" v-for="pokemon in filteredPokemons" :key="pokemon.name">
                         <div class="card pokemon-card">
                             <div class="card-body">
                                 <img :src="pokemon.sprites.other['official-artwork'].front_default">
@@ -90,8 +90,21 @@ export default {
             pokemons: [],
             favorites: [],
             team: [],
-            showTeam: false
+            showTeam: false,
+            showFavorites: false,
+            pokemonTypes: []
         };
+    },
+    computed: {
+        filteredPokemons() {
+            if (this.showTeam) {
+                return this.pokemons.filter(pokemon => this.team.includes(pokemon.id));
+            } else if(this.showFavorites) {
+                return this.pokemons.filter(pokemon => this.favorites.includes(pokemon.id));
+            } else {
+                return this.pokemons;
+            }
+        }
     },
     methods: {
         selectPokemons() {
@@ -102,17 +115,17 @@ export default {
                         return fetch(pokemon.url)
                             .then(response => response.json());
                     }))
-                    .then(pokemons => {
-                        pokemons.forEach(pokemon => {
-                            this.pokemons.push(pokemon);
-                            if (this.favorites.includes(pokemon.id)) {
-                                pokemon.favorite = true;
-                            }
-                            if (this.team.includes(pokemon.id)) {
-                                pokemon.team = true;
-                            }
+                        .then(pokemons => {
+                            pokemons.forEach(pokemon => {
+                                this.pokemons.push(pokemon);
+                                if (this.favorites.includes(pokemon.id)) {
+                                    pokemon.favorite = true;
+                                }
+                                if (this.team.includes(pokemon.id)) {
+                                    pokemon.team = true;
+                                }
+                            });
                         });
-                    });
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
