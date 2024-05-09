@@ -98,8 +98,13 @@ export default {
     computed: {
         filteredPokemons() {
             if (this.showTeam) {
-                return this.pokemons.filter(pokemon => this.team.includes(pokemon.id));
-            } else if(this.showFavorites) {
+                // if (this.team.length !== 6) {
+                    // return this.pokemons;
+                    // alert("You need 6 Pokemons on your team")
+                // } else {
+                    return this.pokemons.filter(pokemon => this.team.includes(pokemon.id));
+                // }
+            } else if (this.showFavorites) {
                 return this.pokemons.filter(pokemon => this.favorites.includes(pokemon.id));
             } else {
                 return this.pokemons;
