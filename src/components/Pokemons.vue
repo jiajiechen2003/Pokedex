@@ -89,7 +89,8 @@ export default {
         return {
             pokemons: [],
             favorites: [],
-            team: []
+            team: [],
+            showTeam: false
         };
     },
     methods: {
@@ -97,24 +98,27 @@ export default {
             fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
                 .then(response => response.json())
                 .then(data => {
-                    data.results.forEach(pokemon => {
-                        fetch(pokemon.url)
-                            .then(response => response.json())
-                            .then(pokeData => {
-                                this.pokemons.push(pokeData);
-                                if (this.favorites.includes(pokeData.id)) {
-                                    pokeData.favorite = true;
-                                }
-                                if (this.team.includes(pokeData.id)) {
-                                    pokeData.team = true;
-                                }
-                            })
-                    })
+                    Promise.all(data.results.map(pokemon => {
+                        return fetch(pokemon.url)
+                            .then(response => response.json());
+                    }))
+                    .then(pokemons => {
+                        pokemons.forEach(pokemon => {
+                            this.pokemons.push(pokemon);
+                            if (this.favorites.includes(pokemon.id)) {
+                                pokemon.favorite = true;
+                            }
+                            if (this.team.includes(pokemon.id)) {
+                                pokemon.team = true;
+                            }
+                        });
+                    });
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
                 });
         },
+
         formattedId(id) {
             return "Nº" + id.toString().padStart(4, "0");
         },
@@ -167,6 +171,7 @@ export default {
     margin: 0;
     padding: 0;
     text-transform: capitalize;
+    font-family: "Roboto", arial, sans-serif;
 }
 
 .container-fluid.header {
