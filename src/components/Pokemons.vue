@@ -78,7 +78,7 @@ export default {
             team: [],
             showTeam: false,
             showFavorites: false,
-            pokemonTypes: ["grass", "poison", "fire", "water", "bug", "flying", "normal", "electric", "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"],
+            pokemonTypes: ["all", "grass", "poison", "fire", "water", "bug", "flying", "normal", "electric", "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"],
             selectedType: null
         };
     },
@@ -94,8 +94,11 @@ export default {
             } else if (this.showFavorites) {
                 return this.pokemons.filter(pokemon => this.favorites.includes(pokemon.id));
             } else if (this.selectedType) {
-                console.log(this.selectedType)
-                return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.selectedType));
+                if (this.selectedType === "all") {
+                    return this.pokemons
+                } else {
+                    return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.selectedType));
+                }
             } else {
                 return this.pokemons;
             }
