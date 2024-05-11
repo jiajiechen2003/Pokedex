@@ -16,6 +16,6 @@ export default {
 * {
     margin: 0;
     padding: 0;
-    text-transform: capitalize;
+    text-transform: capitalize
 }
 </style>

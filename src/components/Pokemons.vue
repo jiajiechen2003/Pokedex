@@ -9,23 +9,9 @@
                             Filter by Type
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item">Grass</a></li>
-                            <li><a class="dropdown-item">Poison</a></li>
-                            <li><a class="dropdown-item">Fire</a></li>
-                            <li><a class="dropdown-item">Water</a></li>
-                            <li><a class="dropdown-item">Bug</a></li>
-                            <li><a class="dropdown-item">Flying</a></li>
-                            <li><a class="dropdown-item">Normal</a></li>
-                            <li><a class="dropdown-item">Electric</a></li>
-                            <li><a class="dropdown-item">Ground</a></li>
-                            <li><a class="dropdown-item">Fairy</a></li>
-                            <li><a class="dropdown-item">Fighting</a></li>
-                            <li><a class="dropdown-item">Psychic</a></li>
-                            <li><a class="dropdown-item">Rock</a></li>
-                            <li><a class="dropdown-item">Steel</a></li>
-                            <li><a class="dropdown-item">Ice</a></li>
-                            <li><a class="dropdown-item">Ghost</a></li>
-                            <li><a class="dropdown-item">Dragon</a></li>
+                            <li v-for="type in pokemonTypes" @click="selectType(type)">
+                                <a class="dropdown-item">{{ type }}</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="filters-checks">
@@ -49,7 +35,7 @@
                             <img src="../img/pokedex-logo.png">
                         </div>
                     </nav>
-                    <div class="card-col" v-for="pokemon in filteredPokemons" :key="pokemon.name">
+                    <div class="card-col" v-for="pokemon in filteredPokemons">
                         <div class="card pokemon-card">
                             <div class="card-body">
                                 <img :src="pokemon.sprites.other['official-artwork'].front_default">
@@ -92,20 +78,24 @@ export default {
             team: [],
             showTeam: false,
             showFavorites: false,
-            pokemonTypes: []
+            pokemonTypes: ["grass", "poison", "fire", "water", "bug", "flying", "normal", "electric", "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"],
+            selectedType: null
         };
     },
     computed: {
         filteredPokemons() {
             if (this.showTeam) {
                 // if (this.team.length !== 6) {
-                    // return this.pokemons;
-                    // alert("You need 6 Pokemons on your team")
+                // return this.pokemons;
+                // alert("You need 6 Pokemons on your team")
                 // } else {
-                    return this.pokemons.filter(pokemon => this.team.includes(pokemon.id));
+                return this.pokemons.filter(pokemon => this.team.includes(pokemon.id));
                 // }
             } else if (this.showFavorites) {
                 return this.pokemons.filter(pokemon => this.favorites.includes(pokemon.id));
+            } else if (this.selectedType) {
+                console.log(this.selectedType)
+                return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.selectedType));
             } else {
                 return this.pokemons;
             }
@@ -130,6 +120,7 @@ export default {
                                     pokemon.team = true;
                                 }
                             });
+                            { }
                         });
                 })
                 .catch(error => {
@@ -175,6 +166,11 @@ export default {
         },
         loadTeam() {
             this.team = JSON.parse(localStorage.getItem('team')) || [];
+        },
+        selectType(type) {
+            this.selectedType = type;
+            console.log(type);
+            console.log(this.selectedType)
         }
     },
     created() {
@@ -188,7 +184,6 @@ export default {
 * {
     margin: 0;
     padding: 0;
-    text-transform: capitalize;
     font-family: "Roboto", arial, sans-serif;
 }
 
