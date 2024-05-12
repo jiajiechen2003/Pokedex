@@ -24,10 +24,12 @@
                             <label for="onFavorites">Favorites</label>
                         </div>
 
-                        <div class="id-range">
-                            <input type="range" class="form-range" id="customRange1">
-                        </div>
+                        <Slider @slider="sliderRange"></Slider>
                     </div>
+
+                    <Inventory></Inventory>
+                    <Shop></Shop>
+
                 </div>
                 <div class="col-10 pokemon-display">
                     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -66,10 +68,13 @@
 </template>
 <script>
 import Types from './Types.vue';
+import Slider from './Slider.vue';
+import Inventory from './Inventory.vue';
+import Shop from './Shop.vue';
 
 export default {
     components: {
-        Types
+        Types, Slider, Inventory, Shop
     },
     data() {
         return {
@@ -79,7 +84,9 @@ export default {
             showTeam: false,
             showFavorites: false,
             pokemonTypes: ["all", "grass", "poison", "fire", "water", "bug", "flying", "normal", "electric", "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"],
-            selectedType: null
+            selectedType: null,
+            sliderValue: 0,
+            sliderValues: []
         };
     },
     computed: {
@@ -174,6 +181,12 @@ export default {
             this.selectedType = type;
             console.log(type);
             console.log(this.selectedType)
+        },
+        sliderRange(newValue) {
+            this.sliderValue = newValue
+            this.sliderValues.push(this.sliderValue);
+            // console.log(this.sliderValue)
+            console.log(this.sliderValues)
         }
     },
     created() {
@@ -334,7 +347,7 @@ export default {
     width: 155px;
     height: 50px;
     border-radius: 0px;
-    background-color: #313131;
+    background-color: #4152D6;
 }
 
 .dropdown-menu {
