@@ -1,8 +1,8 @@
 <template>
     <div class="sliders">
-        <input min="0" max="151" type="range" step="1" v-model="rangeValue1">
+        <input value="0" min="0" max="151" type="range" step="1" v-model="rangeValue1">
         <p>{{ rangeValue1 }}</p>
-        <input min="0" max="151" type="range" step="1" v-model="rangeValue2" :disabled="rangeValue1 < rangeValue2">
+        <input value="151" min="0" max="151" type="range" step="1" v-model="rangeValue2" :disabled="rangeValue1 < rangeValue2">
         <p>{{ rangeValue2 }}</p>
     </div>
 </template>
@@ -12,7 +12,7 @@ export default {
     data() {
         return {
             rangeValue1: 0,
-            rangeValue2: 0
+            rangeValue2: 151
         }
     },
     watch: {
