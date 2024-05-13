@@ -7,13 +7,25 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p v-for="item in items">
-                        {{ item.name }}
-                    </p>
+                    <div class="row">
+                        <div class="col-3" v-for="(item, index) in items">
+                            <div class="card">
+                                <div class="card-body">
+                                    <img :src="item.sprites.default">
+                                    <div class="change-quantity">
+                                        <button @click="decrement(index)">-</button>
+                                        <p>{{ item.quantity }}</p>
+                                        <button @click="increment(index)">+</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div> -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Buy</button>
+                </div>
             </div>
         </div>
     </div>
@@ -22,7 +34,7 @@
 export default {
     data() {
         return {
-            items: []
+            items: [],
         };
     },
     methods: {
@@ -30,11 +42,10 @@ export default {
             fetch('https://pokeapi.co/api/v2/item/')
                 .then(response => response.json())
                 .then(data => {
-                    // Map through the fetched item URLs and fetch each item
                     Promise.all(data.results.map(item => fetch(item.url)))
                         .then(responses => Promise.all(responses.map(response => response.json())))
                         .then(items => {
-                            this.items = items;
+                            this.items = items.map(item => ({ ...item, quantity: 0 }));
                         })
                         .catch(error => {
                             console.error('Error fetching item details:', error);
@@ -43,6 +54,14 @@ export default {
                 .catch(error => {
                     console.error('Error fetching item list:', error);
                 });
+        },
+        increment(index) {
+            this.items[index].quantity++;
+        },
+        decrement(index) {
+            if(this.items[index].quantity > 0) {
+                this.items[index].quantity--;
+            }
         }
     },
     created() {
@@ -51,6 +70,9 @@ export default {
 }
 </script>
 <style scoped>
+* {
+    margin: 0;
+}
 .btn {
     width: 100px;
     height: 40px;
@@ -66,5 +88,40 @@ export default {
 .modal-content {
     width: 80%;
     height: 90vh;
+}
+
+.row {
+    gap: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+}
+
+.card {
+    width: 250px;
+    height: 250px;
+}
+
+.card-body {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid black;
+}
+
+.card-body img {
+    width: 100%;
+    background-color: #F2F2F2;
+}
+
+.change-quantity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    height: 40px;
 }
 </style>

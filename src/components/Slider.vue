@@ -1,24 +1,36 @@
 <template>
-    <div class="id-range">
-        <input type="range" class="form-range" min="0" max="151" id="customRange1" v-model="rangeValue">
-        <p>Valor del rango: {{ rangeValue }}</p>
+    <div class="sliders">
+        <input min="0" max="151" type="range" step="1" v-model="rangeValue1">
+        <p>{{ rangeValue1 }}</p>
+        <input min="0" max="151" type="range" step="1" v-model="rangeValue2" :disabled="rangeValue1 < rangeValue2">
+        <p>{{ rangeValue2 }}</p>
     </div>
 </template>
+
 <script>
 export default {
-    props: {
-        value: Number
-    },
     data() {
         return {
-            rangeValue: 0
+            rangeValue1: 0,
+            rangeValue2: 0
         }
     },
     watch: {
-        rangeValue(newValue) {
-            this.$emit('slider', newValue)
+        rangeValue1() {
+            this.$emit('slider', [this.rangeValue1, this.rangeValue2]);
+        },
+        rangeValue2() {
+            this.$emit('slider', [this.rangeValue1, this.rangeValue2]);
         }
     }
 }
 </script>
-<style scoped></style>
+
+<style scoped>
+.sliders {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+</style>

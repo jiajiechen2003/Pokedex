@@ -15,11 +15,11 @@
                 </div>
                 <div class="filters-checks">
                     <div class="team-check">
-                        <input type="checkbox" id="onTeam" v-model="showTeam">
+                        <input type="checkbox" id="onTeam" v-model="teamPokemons">
                         <label for="onTeam">Team</label>
                     </div>
                     <div class="favorites-check">
-                        <input type="checkbox" id="onFavorites" v-model="showFavorites">
+                        <input type="checkbox" id="onFavorites" v-model="favoritePokemons">
                         <label for="onFavorites">Favorites</label>
                     </div>
 
@@ -38,7 +38,7 @@
                         <img src="../img/pokedex-logo.png">
                     </div>
                 </nav>
-                <div class="card-col" v-for="pokemon in filteredPokemons">
+                <div class="card-col" v-for="pokemon in filter">
                     <div class="card pokemon-card">
                         <div class="card-body">
                             <img :src="pokemon.sprites.other['official-artwork'].front_default">
@@ -80,30 +80,29 @@ export default {
             pokemons: [],
             favorites: [],
             team: [],
-            showTeam: false,
-            showFavorites: false,
+            teamPokemons: false,
+            favoritePokemons: false,
             pokemonTypes: ["all", "grass", "poison", "fire", "water", "bug", "flying", "normal", "electric", "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"],
-            selectedType: null,
-            sliderValue: 0,
+            type: null,
             sliderValues: []
         };
     },
     computed: {
-        filteredPokemons() {
-            if (this.showTeam) {
+        filter() {
+            if (this.teamPokemons) {
                 // if (this.team.length !== 6) {
                 // return this.pokemons;
                 // alert("You need 6 Pokemons on your team")
                 // } else {
                 return this.pokemons.filter(pokemon => this.team.includes(pokemon.id));
                 // }
-            } else if (this.showFavorites) {
+            } else if (this.favoritePokemons) {
                 return this.pokemons.filter(pokemon => this.favorites.includes(pokemon.id));
-            } else if (this.selectedType) {
-                if (this.selectedType === "all") {
+            } else if (this.type) {
+                if (this.type === "all") {
                     return this.pokemons
                 } else {
-                    return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.selectedType));
+                    return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.type));
                 }
             } else {
                 return this.pokemons;
@@ -177,16 +176,13 @@ export default {
             this.team = JSON.parse(localStorage.getItem('team')) || [];
         },
         selectType(type) {
-            this.selectedType = type;
+            this.type = type;
             console.log(type);
-            console.log(this.selectedType)
+            console.log(this.type)
         },
-        sliderRange(newValue) {
-            this.sliderValue = newValue
-            this.sliderValues.push(this.sliderValue);
-            // console.log(this.sliderValue)
-            console.log(this.sliderValues)
-        }
+        sliderRange(values) {
+            this.sliderValues = values;
+        },
     },
     created() {
         this.selectPokemons();
@@ -358,7 +354,11 @@ export default {
 }
 
 .filters-checks {
-    gap: 20px;
+    gap: 5px;
+    display: flex;
+    /* justify-content: center; */
+    flex-direction: column;
+    /* align-items: center; */
 }
 
 .filters-checks input {
