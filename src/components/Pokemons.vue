@@ -1,68 +1,62 @@
 <template>
     <div class="container-fluid">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-2 filters">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Filter by Type
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li v-for="type in pokemonTypes" @click="selectType(type)">
-                                <a class="dropdown-item">{{ type }}</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="filters-checks">
-                        <div class="team-check">
-                            <input type="checkbox" id="all" v-model="showAll">
-                            <label for="all">All</label>
-                        </div>
-
-                        <div class="team-check">
-                            <input type="checkbox" id="onTeam" v-model="showTeam">
-                            <label for="onTeam">Team</label>
-                        </div>
-                        <div class="favorites-check">
-                            <input type="checkbox" id="onFavorites" v-model="showFavorites">
-                            <label for="onFavorites">Favorites</label>
-                        </div>
-
-                        <Slider @slider="sliderRange"></Slider>
-                    </div>
-
-                    <Inventory></Inventory>
-                    <Shop></Shop>
-
+        <div class="row">
+            <div class="col-2 filters">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Filter by Type
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li v-for="type in pokemonTypes" @click="selectType(type)">
+                            <a class="dropdown-item">{{ type }}</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="col-10 pokemon-display">
-                    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                        <div class="container-fluid header">
-                            <img src="../img/pokedex-logo.png">
-                        </div>
-                    </nav>
-                    <div class="card-col" v-for="pokemon in filteredPokemons">
-                        <div class="card pokemon-card">
-                            <div class="card-body">
-                                <img :src="pokemon.sprites.other['official-artwork'].front_default">
-                                <div class="pokemon-info">
-                                    <div class="pokemon-data">
-                                        <p>{{ formattedId(pokemon.id) }}</p>
-                                        <label
-                                            :class="{ 'favorite': pokemon.favorite, 'add-favorite': !pokemon.favorite }"
-                                            @click="markPokemonAsFavorite(pokemon)">
-                                            <input type="radio" :checked="pokemon.favorite">
-                                        </label>
-                                    </div>
-                                    <div class="name">
-                                        <h5 class="pokemon-name">{{ pokemon.name }}</h5>
-                                        <button @click="addPokemonToTeam(pokemon)">{{ pokemon.team ? 'Remove Team' :
-                                            'Add Team'
-                                            }}</button>
-                                    </div>
-                                    <Types class="types" :types="pokemon.types" />
+                <div class="filters-checks">
+                    <div class="team-check">
+                        <input type="checkbox" id="onTeam" v-model="showTeam">
+                        <label for="onTeam">Team</label>
+                    </div>
+                    <div class="favorites-check">
+                        <input type="checkbox" id="onFavorites" v-model="showFavorites">
+                        <label for="onFavorites">Favorites</label>
+                    </div>
+
+                    <Slider @slider="sliderRange"></Slider>
+                </div>
+
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                    data-bs-target="#inventoryModal">Inventory</button>
+
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                    data-bs-target="#shopModal">Shop</button>
+            </div>
+            <div class="col-10 pokemon-display">
+                <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                    <div class="container-fluid header">
+                        <img src="../img/pokedex-logo.png">
+                    </div>
+                </nav>
+                <div class="card-col" v-for="pokemon in filteredPokemons">
+                    <div class="card pokemon-card">
+                        <div class="card-body">
+                            <img :src="pokemon.sprites.other['official-artwork'].front_default">
+                            <div class="pokemon-info">
+                                <div class="pokemon-data">
+                                    <p>{{ formattedId(pokemon.id) }}</p>
+                                    <label :class="{ 'favorite': pokemon.favorite, 'add-favorite': !pokemon.favorite }"
+                                        @click="markPokemonAsFavorite(pokemon)">
+                                        <input type="radio" :checked="pokemon.favorite">
+                                    </label>
                                 </div>
+                                <div class="name">
+                                    <h5 class="pokemon-name">{{ pokemon.name }}</h5>
+                                    <button @click="addPokemonToTeam(pokemon)">{{ pokemon.team ? 'Remove Team' :
+                                        'Add Team'
+                                        }}</button>
+                                </div>
+                                <Types class="types" :types="pokemon.types" />
                             </div>
                         </div>
                     </div>
@@ -88,7 +82,6 @@ export default {
             team: [],
             showTeam: false,
             showFavorites: false,
-            showAll: false,
             pokemonTypes: ["all", "grass", "poison", "fire", "water", "bug", "flying", "normal", "electric", "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"],
             selectedType: null,
             sliderValue: 0,
@@ -107,9 +100,11 @@ export default {
             } else if (this.showFavorites) {
                 return this.pokemons.filter(pokemon => this.favorites.includes(pokemon.id));
             } else if (this.selectedType) {
-                return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.selectedType));
-            } else if (this.showAll) {
-                return this.pokemons;
+                if (this.selectedType === "all") {
+                    return this.pokemons
+                } else {
+                    return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.selectedType));
+                }
             } else {
                 return this.pokemons;
             }
@@ -368,5 +363,11 @@ export default {
 
 .filters-checks input {
     margin-right: 5px;
+}
+
+.btn-warning {
+    width: 100px;
+    height: 40px;
+    border-radius: 0px;
 }
 </style>

@@ -1,13 +1,17 @@
 <template>
+    <Inventory></Inventory>
+    <Shop></Shop>
     <Pokemons></Pokemons>
 </template>
 
 <script>
+import Inventory from './components/Inventory.vue';
 import Pokemons from './components/Pokemons.vue';
+import Shop from './components/Shop.vue';
 
 export default {
     components: {
-        Pokemons
+        Pokemons, Inventory, Shop
     }
 }
 </script>
@@ -16,6 +20,6 @@ export default {
 * {
     margin: 0;
     padding: 0;
-    text-transform: capitalize
+    text-transform: capitalize;
 }
 </style>
