@@ -16,6 +16,11 @@
                     </div>
                     <div class="filters-checks">
                         <div class="team-check">
+                            <input type="checkbox" id="all" v-model="showAll">
+                            <label for="all">All</label>
+                        </div>
+
+                        <div class="team-check">
                             <input type="checkbox" id="onTeam" v-model="showTeam">
                             <label for="onTeam">Team</label>
                         </div>
@@ -83,6 +88,7 @@ export default {
             team: [],
             showTeam: false,
             showFavorites: false,
+            showAll: false,
             pokemonTypes: ["all", "grass", "poison", "fire", "water", "bug", "flying", "normal", "electric", "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"],
             selectedType: null,
             sliderValue: 0,
@@ -101,11 +107,9 @@ export default {
             } else if (this.showFavorites) {
                 return this.pokemons.filter(pokemon => this.favorites.includes(pokemon.id));
             } else if (this.selectedType) {
-                if (this.selectedType === "all") {
-                    return this.pokemons
-                } else {
-                    return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.selectedType));
-                }
+                return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.selectedType));
+            } else if (this.showAll) {
+                return this.pokemons;
             } else {
                 return this.pokemons;
             }
