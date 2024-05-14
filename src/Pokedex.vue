@@ -1,6 +1,6 @@
 <template>
     <Inventory></Inventory>
-    <Shop></Shop>
+    <Shop @itemsData="loadData"></Shop>
     <Pokemons></Pokemons>
 </template>
 
@@ -10,9 +10,20 @@ import Pokemons from './components/Pokemons.vue';
 import Shop from './components/Shop.vue';
 
 export default {
+    data(){
+        return {
+            items: []
+        }
+    },
     components: {
         Pokemons, Inventory, Shop
-    }
+    },
+    methods: {
+        loadData(items) {
+            this.items = items
+            console.log(this.items)
+        }
+    },
 }
 </script>
 

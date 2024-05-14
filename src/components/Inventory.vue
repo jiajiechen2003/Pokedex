@@ -1,4 +1,5 @@
 <template>
+    <Shop @itemsData="loadData"></Shop>
     <div class="modal fade" id="inventoryModal">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -8,58 +9,55 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-3" v-for="item in items">
+                        <div class="col-3" v-for="item in itemsWithQuantity">
                             <div class="card">
                                 <div class="card-body">
                                     <img :src="item.sprites.default">
-                                    <p>{{ item.name }}</p>
+                                    <p>{{ item.name + ' x' + item.quantity }}</p>
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="modal-footer">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+import Shop from './Shop.vue';
+
 export default {
+    components: {
+        Shop
+    },
+    computed: {
+        itemsWithQuantity() {
+            return this.items.filter(item => item.quantity > 0)
+        }
+    },
     data() {
         return {
             items: []
         };
     },
     methods: {
-        selectItems() {
-            fetch('https://pokeapi.co/api/v2/item/')
-                .then(response => response.json())
-                .then(data => {
-                    // Map through the fetched item URLs and fetch each item
-                    Promise.all(data.results.map(item => fetch(item.url)))
-                        .then(responses => Promise.all(responses.map(response => response.json())))
-                        .then(items => {
-                            this.items = items;
-                        })
-                        .catch(error => {
-                            console.error('Error fetching item details:', error);
-                        });
-                })
-                .catch(error => {
-                    console.error('Error fetching item list:', error);
-                });
-        }
+        loadData(items) {
+            this.items = items
+            console.log(this.items)
+        }   
     },
     created() {
-        this.selectItems();
     }
 }
 </script>
 <style scoped>
+* {
+    text-transform: capitalize;
+}
 .btn {
     width: 100px;
     height: 40px;

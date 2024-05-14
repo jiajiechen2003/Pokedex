@@ -14,7 +14,7 @@
                                     <img :src="item.sprites.default">
                                     <div class="change-quantity">
                                         <button @click="decrement(index)">-</button>
-                                        <p>{{ item.quantity }}</p>
+                                        <p>{{ item.addItems }}</p>
                                         <button @click="increment(index)">+</button>
                                     </div>
                                 </div>
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Buy</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="buyItems">Buy</button>
                 </div>
             </div>
         </div>
@@ -45,7 +45,9 @@ export default {
                     Promise.all(data.results.map(item => fetch(item.url)))
                         .then(responses => Promise.all(responses.map(response => response.json())))
                         .then(items => {
-                            this.items = items.map(item => ({ ...item, quantity: 0 }));
+                            const itemData = JSON.parse(localStorage.getItem('items'));
+                            this.items = items.map((item, index) => ({ ...item, quantity: itemData[index].quantity || 0, addItems: 0 }));
+                            console.log(this.items);
                         })
                         .catch(error => {
                             console.error('Error fetching item details:', error);
@@ -56,16 +58,29 @@ export default {
                 });
         },
         increment(index) {
-            this.items[index].quantity++;
+            this.items[index].addItems++;
         },
         decrement(index) {
-            if(this.items[index].quantity > 0) {
-                this.items[index].quantity--;
+            if (this.items[index].addItems > 0) {
+                this.items[index].addItems--;
             }
-        }
+        },
+        buyItems() {
+            this.items.forEach(item => {
+                item.quantity += item.addItems;
+                item.addItems = 0;
+            });
+            localStorage.setItem('items', JSON.stringify(this.items))
+            console.log(this.items)
+        },
     },
     created() {
         this.selectItems();
+    },
+    watch: {
+        items() {
+            this.$emit('itemsData', this.items)
+        }
     }
 }
 </script>
@@ -73,6 +88,7 @@ export default {
 * {
     margin: 0;
 }
+
 .btn {
     width: 100px;
     height: 40px;
