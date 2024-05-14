@@ -84,7 +84,8 @@ export default {
             favoritePokemons: false,
             pokemonTypes: ["all", "grass", "poison", "fire", "water", "bug", "flying", "normal", "electric", "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"],
             type: null,
-            sliderValues: []
+            rangeValue1: 0,
+            rangeValue2: 0,
         };
     },
     computed: {
@@ -104,7 +105,10 @@ export default {
                 } else {
                     return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.type));
                 }
-            } else {
+            } else if (this.rangeValue1 > 0) {
+                return this.pokemons.filter(pokemon => pokemon.id >= this.rangeValue1 && pokemon.id <= this.rangeValue2);
+            }
+            else {
                 return this.pokemons;
             }
         }
@@ -180,8 +184,10 @@ export default {
             console.log(type);
             console.log(this.type)
         },
-        sliderRange(values) {
-            this.sliderValues = values;
+        sliderRange(value1, value2) {
+            this.rangeValue1 = value1;
+            this.rangeValue2 = value2;
+            console.log(this.rangeValue1)
         },
     },
     created() {

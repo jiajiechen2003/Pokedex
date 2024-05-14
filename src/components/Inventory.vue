@@ -9,13 +9,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-3" v-for="item in itemsWithQuantity">
+                        <div class="col-3" v-for="item in itemsInInventory">
                             <div class="card">
                                 <div class="card-body">
                                     <img :src="item.sprites.default">
                                     <p>{{ item.name + ' x' + item.quantity }}</p>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -35,7 +34,7 @@ export default {
         Shop
     },
     computed: {
-        itemsWithQuantity() {
+        itemsInInventory() {
             return this.items.filter(item => item.quantity > 0)
         }
     },

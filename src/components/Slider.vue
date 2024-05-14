@@ -1,9 +1,9 @@
 <template>
     <div class="sliders">
         <input value="0" min="0" max="151" type="range" step="1" v-model="rangeValue1">
-        <p>{{ rangeValue1 }}</p>
-        <input value="151" min="0" max="151" type="range" step="1" v-model="rangeValue2" :disabled="rangeValue1 < rangeValue2">
-        <p>{{ rangeValue2 }}</p>
+        <p>{{'Nº Min ' + rangeValue1 }}</p>
+        <input value="151" min="0" max="151" type="range" step="1" v-model="rangeValue2">
+        <p>{{'Nº Max ' + rangeValue2 }}</p>
     </div>
 </template>
 
@@ -17,10 +17,10 @@ export default {
     },
     watch: {
         rangeValue1() {
-            this.$emit('slider', [this.rangeValue1, this.rangeValue2]);
+            this.$emit('slider', this.rangeValue1, this.rangeValue2);
         },
         rangeValue2() {
-            this.$emit('slider', [this.rangeValue1, this.rangeValue2]);
+            this.$emit('slider', this.rangeValue1, this.rangeValue2);
         }
     }
 }
