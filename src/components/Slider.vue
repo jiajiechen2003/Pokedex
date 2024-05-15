@@ -1,9 +1,9 @@
 <template>
     <div class="sliders">
         <input value="0" min="0" max="151" type="range" step="1" v-model="rangeValue1">
-        <p>{{'Nº Min ' + rangeValue1 }}</p>
+        <p>{{ 'Nº Min ' + rangeValue1 }}</p>
         <input value="151" min="0" max="151" type="range" step="1" v-model="rangeValue2">
-        <p>{{'Nº Max ' + rangeValue2 }}</p>
+        <p>{{ 'Nº Max ' + rangeValue2 }}</p>
     </div>
 </template>
 

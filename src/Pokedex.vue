@@ -1,6 +1,6 @@
 <template>
     <Inventory></Inventory>
-    <Shop @itemsData="loadData"></Shop>
+    <Shop></Shop>
     <Pokemons></Pokemons>
 </template>
 

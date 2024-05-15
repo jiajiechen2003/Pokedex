@@ -162,19 +162,18 @@ export default {
             if (pokemon.team) {
                 const index = this.team.indexOf(pokemon.id);
                 if (index !== -1) {
-                    this.team.splice(index, 1);
                     pokemon.team = false;
-                    localStorage.setItem('team', JSON.stringify(this.team));
+                    this.team.splice(index, 1);
                 }
             } else {
                 if (this.team.length < 6) {
                     pokemon.team = true;
                     this.team.push(pokemon.id);
-                    localStorage.setItem('team', JSON.stringify(this.team));
                 } else {
                     alert("Your Team Already Has 6 Pokemon");
                 }
             }
+            localStorage.setItem('team', JSON.stringify(this.team));
         },
         loadTeam() {
             this.team = JSON.parse(localStorage.getItem('team')) || [];
