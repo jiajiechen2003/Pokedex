@@ -101,6 +101,7 @@ export default {
                 return this.pokemons.filter(pokemon => this.favorites.includes(pokemon.id));
             } else if (this.type) {
                 if (this.type === "all") {
+                    this.type = null;
                     return this.pokemons
                 } else {
                     return this.pokemons.filter(pokemon => pokemon.types.some(type => type.type.name === this.type));
